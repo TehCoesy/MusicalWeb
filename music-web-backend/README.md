@@ -13,3 +13,9 @@ run `npm install`.
 ```js
 adonis migration:run
 ```
+
+### Start
+
+```
+adonis serve --dev
+```
