@@ -1,0 +1,16 @@
+.form {
+    background: rgb(49,113,113);
+    background: radial-gradient(circle, rgba(49,113,113,1) 48%, rgba(18,162,148,1) 65%);
+}
+
+.login, .register{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100vh;
+}
+
+.register {
+    display: none;
+}
