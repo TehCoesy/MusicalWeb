@@ -24,10 +24,10 @@ const Navbar = () => {
             </a>
             </div>
             <div>
-            <a href="/login" className="inline-block text-sm px-4 py-2 leading-none border rounded text-red-400 border-white hover:border-transparent hover:text-white hover:bg-blue-400 mt-4 lg:mt-0 mx-2">Sign in</a>
+            <a href="/login" className="inline-block text-sm px-4 py-2 leading-none border rounded text-red-600 border-white hover:border-transparent hover:text-white hover:bg-blue-400 mt-4 lg:mt-0 mx-2 bg-white">Sign in</a>
             </div>
             <div>
-            <a href="/login" className="inline-block text-sm px-4 py-2 leading-none border rounded text-red-400 border-white hover:border-transparent hover:text-white hover:bg-red-400 mt-4 lg:mt-0 mx-2">Sign up now</a>
+            <a href="/login" className="inline-block text-sm px-4 py-2 leading-none border rounded text-red-600 border-white hover:border-transparent hover:text-white hover:bg-red-400 mt-4 lg:mt-0 mx-2 bg-white">Sign up now</a>
             </div>
         </div>
     </nav>
