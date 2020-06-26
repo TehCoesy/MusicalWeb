@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Navbar from '../../landing-page/components/navbar';
 import logo from '../../../img/Google_Play_Music_icon-icons.com_75720.png';
+import LoadingScreen from 'react-loading-screen';
 import {
     Form,
     Upload,
@@ -21,9 +22,31 @@ const Dashboard = () => {
         return e && e.fileList;
       };
 
+    const [loading, setLoading] = useState(false)
+
+    const logout = () => {
+        localStorage.removeItem('token');
+        window.location.href = "/login";
+    }
+
+    useEffect(() => {
+        if(!localStorage.getItem("token")) {
+            setLoading(true);
+            logout(); 
+            
+        }
+    })
+
     return (
         
         <div>
+            <LoadingScreen
+                loading={loading}
+                bgColor='#f1f1f1'
+                spinnerColor='#9ee5f8'
+                textColor='#676767'
+                text='Please login your account first...'
+            >
             <nav className="flex items-center justify-between flex-wrap bg-pink-200 p-6">
                 <div className="flex items-center flex-shrink-0 text-red-600 mr-6">
                     <img src={logo} width={50} className="px-2"></img>
@@ -42,7 +65,7 @@ const Dashboard = () => {
                         Welcome, <i className="ion-person"></i> User! 
                     </div>
 
-                    <div className="text-xl tracking-wider pr-3 cursor-pointer hover:underline">
+                    <div onClick={() => logout()} className="text-xl tracking-wider pr-3 cursor-pointer hover:underline">
                          <i className="ion-log-out"></i> Logout
                     </div>
                 </div>
@@ -91,7 +114,7 @@ const Dashboard = () => {
             </Form>
         </div>
 
-        
+        </LoadingScreen>
     </div>
     )
 }
