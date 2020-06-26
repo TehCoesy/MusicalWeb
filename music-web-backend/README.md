@@ -10,6 +10,7 @@ run `npm install`.
 
 ### Migrations
 
+tạo database
 ```js
 adonis migration:run
 ```
