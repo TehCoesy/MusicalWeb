@@ -13,7 +13,10 @@
     "react-router-config": "^5.1.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "react-toast-notifications": "^2.4.0"
+    "react-toast-notifications": "^2.4.0",
+    "antd": "^4.3.4",
+    "axios": "^0.19.2",
+    "tailwindcss": "^1.4.6"
   },
   "scripts": {
     "start": "react-scripts start",

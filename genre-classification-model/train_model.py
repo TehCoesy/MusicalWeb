@@ -7,24 +7,29 @@ import librosa.feature
 
 import os, glob, math
 import numpy as np
+import argparse
 
 import keras
 from keras.models import Sequential
 from keras.layers import Dense, Activation
 from keras.utils.np_utils import to_categorical
 
-CLASS_LABEL = {"blues", "classical", "country", "disco", "hiphop", "jazz", "metal", "pop", "reggae", "rock"}
-DATA_FOLDER = 'genres'
+# Preferences
+CLASS_LABEL = ["blues", "classical", "country", "disco", "hiphop", "jazz", "metal", "pop", "reggae", "rock"]
+DATA_FOLDER = './genres'
 
-TRAIN_TEST_SPLIT = 0.2
+TRAIN_TEST_SPLIT = 0.8
+TRAINING_EPOCHS = 10
+BATCH_SIZE = 32
 
-load_weight = True
+load_weight = False
 save_weight = True
-weight_folder = './Models'
-weight_filename = 'music_genre_2.h5'
+
+WEIGHTS_FOLDER = "Models"
+WEIGHTS_FILENAME = "dense_e15_0.h5"
 
 def extract_features(filename):
-    sound, sr = librosa.load(filename)
+    sound, _ = librosa.load(filename)
 
     # Get MFCC
     mfcc = librosa.feature.mfcc(sound)
@@ -42,7 +47,7 @@ def generate_features_labels():
 
     for class_name in CLASS_LABEL:
         print("Loading class", class_name)
-        sound_files = glob.glob(DATA_FOLDER + "/" + class_name + "/*.au")
+        sound_files = glob.glob(DATA_FOLDER + "/" + class_name + "/*.wav")
 
         for f in sound_files:
             #print("Loading file", f)
@@ -85,9 +90,9 @@ def generate_train_test_sets(all_features, all_labels):
 def create_model(input_dim, output_dim):
     model = Sequential()
 
-    model.add(Dense(512, activation='relu', input_dim=input_dim))
-    model.add(Dense(256, activation='relu'))
-    model.add(Dense(256, activation='relu'))
+    model.add(Dense(256, activation='relu', input_dim=input_dim))
+    model.add(Dense(128, activation='relu'))
+    model.add(Dense(128, activation='relu'))
     model.add(Dense(output_dim, activation='softmax'))
 
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
@@ -99,17 +104,20 @@ def training_session():
 
     trainX, trainY, testX, testY = generate_train_test_sets(all_features, all_labels)
 
+    #print(np.shape(trainX)[1])
+    #print(np.shape(trainY)[1])
+
     model = create_model(np.shape(trainX)[1], np.shape(trainY)[1])
 
     if load_weight:
         print("Loading previous weight")
         try:
-            model.load_weights(os.path.join(weight_folder, weight_filename))
+            model.load_weights(os.path.join(WEIGHTS_FOLDER, WEIGHTS_FILENAME))
         except Exception as e:
             print("Error loading weight file")
             print(e)
 
-    model.fit(trainX, trainY, epochs=100, batch_size=32, verbose=1)
+    model.fit(trainX, trainY, epochs=TRAINING_EPOCHS, batch_size=BATCH_SIZE, verbose=1)
 
     loss, acc = model.evaluate(testX, testY, batch_size=32)
 
@@ -118,10 +126,26 @@ def training_session():
     if save_weight:
         print("Saving weight")
         try:
-            model.save_weights(os.path.join(weight_folder, weight_filename))
+            model.save_weights(os.path.join(WEIGHTS_FOLDER, WEIGHTS_FILENAME))
         except Exception as e:
             print("Error saving weights")
             print(e)
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-f", "--weight_file", help="Specify weights filename", default="dense_e15_0.h5")
+    parser.add_argument("-ff", "--weight_folder", help="Specify where to save weights", default="Models")
+    parser.add_argument("-l", "--load", help="Load trained weights (Maybe unstable)", type=bool, default=False)
+    parser.add_argument("-ns", "--no_save", help="Don't save trained weights", type=bool, default=False)
+
+    args = parser.parse_args()
+
+    WEIGHTS_FILENAME = args.weight_file
+    WEIGHTS_FOLDER = args.weight_folder
+
+    if args.load:
+        load_weight = True
+    if args.no_save:
+        save_weight = False
+
     training_session()
