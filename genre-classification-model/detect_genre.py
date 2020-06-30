@@ -39,7 +39,20 @@ def extract_feature_dense(filename):
 
     return None
 
-def create_model(input_dim, output_dim):
+def extract_feature_spectrogram(filename):
+    sound, sr = librosa.load(filename)
+
+    spectrogram = librosa.feature.melspectrogram(y = sound, sr = sr, n_fft = 2048, hop_length = 512)
+
+    # Normalize spectrogram
+    spectrogram = librosa.power_to_db(spectrogram, ref = np.max)
+    spectrogram = spectrogram[:, :1000]
+
+    #print(np.shape(spectrogram))
+
+    return spectrogram.reshape(128, 1000, 1)
+
+def create_model_dense(input_dim, output_dim):
     try:
         model = Sequential()
 
@@ -59,10 +72,12 @@ def create_model(input_dim, output_dim):
 
     return None
 
+def create_model_convnet(input_dim, output_dim):
+
+
 if __name__ == "__main__":
-
+    
     filename = "blues_1.wav"
-
     feature = extract_feature_dense(filename)
     
     #print(np.shape(feature))

@@ -19,14 +19,14 @@ CLASS_LABEL = ["blues", "classical", "country", "disco", "hiphop", "jazz", "meta
 DATA_FOLDER = './genres'
 
 TRAIN_TEST_SPLIT = 0.8
-TRAINING_EPOCHS = 10
+TRAINING_EPOCHS = 80
 BATCH_SIZE = 32
 
 load_weight = False
 save_weight = True
 
-WEIGHTS_FOLDER = "Models"
-WEIGHTS_FILENAME = "dense_e15_0.h5"
+WEIGHTS_FOLDER = "./Models"
+WEIGHTS_FILENAME = "cnn_weights_default.h5"
 
 def extract_features(filename):
     sound, _ = librosa.load(filename)
@@ -126,15 +126,15 @@ def training_session():
     if save_weight:
         print("Saving weight")
         try:
-            model.save_weights(os.path.join(WEIGHTS_FOLDER, WEIGHTS_FILENAME))
+            model.save_weights(WEIGHTS_FOLDER + "/" + WEIGHTS_FILENAME)
         except Exception as e:
-            print("Error saving weights")
+            print("Error saving weight")
             print(e)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--weight_file", help="Specify weights filename", default="dense_e15_0.h5")
-    parser.add_argument("-ff", "--weight_folder", help="Specify where to save weights", default="Models")
+    parser.add_argument("-f", "--weight_file", help="Specify weights filename", default="cnn_weights_default.h5")
+    parser.add_argument("-ff", "--weight_folder", help="Specify where to save weights", default="./Models")
     parser.add_argument("-l", "--load", help="Load trained weights (Maybe unstable)", type=bool, default=False)
     parser.add_argument("-ns", "--no_save", help="Don't save trained weights", type=bool, default=False)
 
