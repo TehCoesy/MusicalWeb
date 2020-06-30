@@ -110,27 +110,27 @@ def create_model(input_dim, output_dim):
     # build network topology
     model = Sequential()
 
-    # 1st conv layer
+    # 1st Conv2D layer
     model.add(Conv2D(32, (3, 3), activation='relu', input_shape=input_dim))
     model.add(MaxPooling2D((3, 3), strides=(2, 2), padding='same'))
     model.add(BatchNormalization())
 
-    # 2nd conv layer
+    # 2nd Conv2D layer
     model.add(Conv2D(32, (3, 3), activation='relu'))
     model.add(MaxPooling2D((3, 3), strides=(2, 2), padding='same'))
     model.add(BatchNormalization())
 
-    # 3rd conv layer
+    # 3rd Conv2D layer
     model.add(Conv2D(32, (2, 2), activation='relu'))
     model.add(MaxPooling2D((2, 2), strides=(2, 2), padding='same'))
     model.add(BatchNormalization())
 
-    # flatten output and feed it into dense layer
+    # Flatten output and feed it into dense layer
     model.add(Flatten())
     model.add(Dense(64, activation='relu'))
     model.add(Dropout(0.3))
 
-    # output layer
+    # Output layer
     model.add(Dense(output_dim, activation='softmax'))
 
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
