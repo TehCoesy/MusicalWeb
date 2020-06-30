@@ -24,3 +24,5 @@ Route.post('/login', 'AuthController.login');
 Route.post('/logout', 'AuthController.logout').middleware(['auth']);
 
 Route.get('/detect', 'DetectController.detectMusicGenre').middleware(['auth']);
+
+Route.get('/generate', 'GeneratePlaylistController.generatePlaylist').middleware(['auth']);
