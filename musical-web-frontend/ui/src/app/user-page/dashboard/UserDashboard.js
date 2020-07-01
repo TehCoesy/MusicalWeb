@@ -2,27 +2,14 @@ import React, {useState, useEffect} from 'react';
 import Navbar from '../../landing-page/components/navbar';
 import logo from '../../../img/Google_Play_Music_icon-icons.com_75720.png';
 import LoadingScreen from 'react-loading-screen';
-import {
-    Form,
-    Upload,
-    Button,
-    Input,
-  } from 'antd';
-  import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
+import UploadFile from './components/upload';
+import { List, Avatar, Space } from 'antd';
+import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
+
 
 const Dashboard = () => {
 
-    const normFile = e => {
-        console.log('Upload event:', e);
-      
-        if (Array.isArray(e)) {
-          return e;
-        }
-      
-        return e && e.fileList;
-      };
-
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
 
     const logout = () => {
         localStorage.removeItem('token');
@@ -36,6 +23,26 @@ const Dashboard = () => {
             
         }
     })
+
+    const listData = [];
+    for (let i = 0; i < 23; i++) {
+    listData.push({
+        href: 'https://ant.design',
+        title: `ant design part ${i}`,
+        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+        description:
+        'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+        content:
+        'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+    });
+    }
+
+    const IconText = ({ icon, text }) => (
+    <Space>
+        {React.createElement(icon)}
+        {text}
+    </Space>
+    );
 
     return (
         
@@ -71,50 +78,55 @@ const Dashboard = () => {
                 </div>
             </nav>
 
-        <div className="m-10 border p-5">
-            <Form>
-                <div className="mb-5">
-                    <label className="font-bold text-4xl text-blue-500 uppercase">Upload</label>
+            <UploadFile />
+
+            <div className="border border-blue-300 text-center p-6 m-10 bg-gray-300 rounded">
+                <h3 className="text-red-500 uppercase tracking-wider text-2xl">Your awesome list <i className="ion-music-note text-purple"></i> <i className="ion-music-note text-purple"></i></h3> 
+
+                <List
+    itemLayout="vertical"
+    size="large"
+    pagination={{
+      onChange: page => {
+        console.log(page);
+      },
+      pageSize: 3,
+    }}
+    dataSource={listData}
+    footer={
+      <div>
+        <b>ant design</b> footer part
+      </div>
+    }
+    renderItem={item => (
+      <List.Item
+        key={item.title}
+        actions={[
+          <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
+          <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
+          <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
+        ]}
+        extra={
+          <img
+            width={272}
+            alt="logo"
+            src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+          />
+        }
+      >
+        <List.Item.Meta
+          avatar={<Avatar src={item.avatar} />}
+          title={<a href={item.href}>{item.title}</a>}
+          description={item.description}
+        />
+        {item.content}
+      </List.Item>
+    )}
+  />
+
                 </div>
 
-                <Form.Item label="">
-                    <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
-                    <Upload.Dragger name="files" action="/upload.do">
-                        <p className="ant-upload-drag-icon">
-                        <InboxOutlined />
-                        </p>
-                        <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                        <p className="ant-upload-hint">Support for a single or bulk upload.</p>
-                    </Upload.Dragger>
-                    </Form.Item>
-                </Form.Item>
-
-                <div className="mb-5">
-                    <label className="italic">Or send a link</label>
-                </div>
-
-                <Form.Item
-                    name="link"
-                    label="Link"
-                    rules={[
-                    {
-                        required: true,
-                        message: 'Please input your link',
-                    },
-                    ]}
-                >
-                <Input placeholder="your wav link" />
-                </Form.Item>
-
-                
-                <Button type="primary" htmlType="submit" >
-                    Submit
-                </Button>
-                
-            </Form>
-        </div>
-
-        </LoadingScreen>
+            </LoadingScreen>
     </div>
     )
 }
