@@ -19,10 +19,12 @@ const Route = use('Route')
 Route.on('/').render('welcome')
 
 Route.post('/register', 'AuthController.register');
-
 Route.post('/login', 'AuthController.login');
 Route.post('/logout', 'AuthController.logout').middleware(['auth']);
 
-Route.get('/detect', 'DetectController.detectMusicGenre').middleware(['auth']);
 
-Route.get('/generate', 'GeneratePlaylistController.generatePlaylist').middleware(['auth']);
+
+Route.post('/detect', 'DetectController.detectMusicGenre').middleware(['auth']);
+Route.post('/upload', 'DetectController.uploadFile');
+
+Route.post('/generate', 'GeneratePlaylistController.generatePlaylist').middleware(['auth']);

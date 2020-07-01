@@ -3,7 +3,7 @@
 const axios = require('axios');
 
 class GeneratePlaylistController {
-    async generatePlaylist({request}) {
+    async generatePlaylist({request, response}) {
         const {genre} = request.get();
         console.log(genre)
         let musicData, listData;
@@ -17,20 +17,25 @@ class GeneratePlaylistController {
         }).catch((error) => {
             console.log(error)
         })
+
         let list = [];
         for(var i = 0;i <= listData; i++){
             if(musicData.results[i] != undefined && musicData.results[i].year != undefined){
-                if(musicData.results[i].year >= 2005){
+                if(musicData.results[i].year >= 1990){
                     list.push(musicData.results[i]);
                 }
             }     
         }
-        console.log(listData);
+        list.sort(() => Math.random() -0.5);
+        // console.log(listData);
         console.log(list.length);
+        if(list.length == 0) {
+            return response.status(400).json({ message: 'no song recommend with this genre' })
+        }
         let data = [];
-        for (var i = 0; i < list.length; i++) {
+        for (var i = 0; i < 10; i++) {
             let _data = {
-                id: i,
+                id: i+1,
                 title: list[i].title,
                 year: list[i].year,
                 label: list[i].label,
@@ -38,7 +43,7 @@ class GeneratePlaylistController {
                 thumbnail: list[i].thumb,
                 master_url: list[i].master_url
             }
-            console.log(_data)
+            // console.log(_data)
             data.push(_data);;
         }
 
