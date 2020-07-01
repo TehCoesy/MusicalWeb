@@ -23,7 +23,6 @@ Route.post('/login', 'AuthController.login');
 Route.post('/logout', 'AuthController.logout').middleware(['auth']);
 
 
-
 Route.post('/detect', 'DetectController.detectMusicGenre').middleware(['auth']);
 Route.post('/upload', 'DetectController.uploadFile');
 
