@@ -27,7 +27,7 @@ class GeneratePlaylistController {
         let list = [];
         for(var i = 0;i <= listData; i++){
             if(musicData.results[i] != undefined && musicData.results[i].year != undefined){
-                if(musicData.results[i].year >= 1990){
+                if(musicData.results[i].year >= 1970){
                     list.push(musicData.results[i]);
                 }
             }     
