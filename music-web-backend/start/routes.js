@@ -28,4 +28,4 @@ Route.get('/detect', 'DetectController.detectMusicGenre').middleware(['auth']);
 
 Route.post('/upload', 'DetectController.uploadFile').middleware(['auth']);
 
-Route.post('/generate', 'GeneratePlaylistController.generatePlaylist').middleware(['auth']);
+Route.get('/generate', 'GeneratePlaylistController.generatePlaylist').middleware(['auth']);

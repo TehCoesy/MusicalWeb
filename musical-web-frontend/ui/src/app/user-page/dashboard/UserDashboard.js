@@ -6,21 +6,35 @@ import UploadFile from './components/upload';
 import { List, Avatar, Space } from 'antd';
 import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
 import axios, { post, get } from 'axios';
+import {useToasts} from 'react-toast-notifications';
+import { Alert } from 'antd';
 
 
 const Dashboard = () => {
 
+    const {addToast} = useToasts()
     const [loading, setLoading] = useState(false);
+    const [detectResult, setDetectResult] = useState(""); 
+    const [showUpload, setShowUpload] = useState("hidden");
+    const [showList, setShowList] = useState("hidden");
+    const [list, setList] = useState([]);
+
 
     const logout = () => {
         localStorage.removeItem('token');
         window.location.href = "/login";
+        localStorage.removeItem('file_name');
+        localStorage.removeItem('genre');
+    }
+
+    const hiddenUpload = () => {
+      if (showUpload == "") setShowUpload("hidden")
+      if (showUpload == "hidden") setShowUpload("")
     }
 
     let detect = () => {
 
-      console.log("click!");
-      console.log(localStorage.getItem('token'))
+      setLoading(true);
 
       axios.get('http://localhost:3333/detect', {
             headers: {
@@ -28,7 +42,13 @@ const Dashboard = () => {
             }
             }).then(function (response) {
                 // if(response.data) window.location.reload();
-                console.log(response)
+                setLoading(false);
+                for(let i = 0; i< response.data.length; i++) {
+                  setDetectResult(response.data[0]);
+                }
+                
+                addToast("Detect: " + response.data[0], { appearance : 'success'});
+                localStorage.setItem('genre', response.data[0]);
             })
             .catch(function (error) {
                 console.log(error);
@@ -38,25 +58,56 @@ const Dashboard = () => {
             })
     }
 
+    let generate = () => {
+
+      setShowList("");
+
+      axios.get('http://localhost:3333/generate?genre='+localStorage.getItem('genre'), {
+        headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+        }).then(function (response) {
+            // if(response.data) window.location.reload();
+            setLoading(false);
+
+            console.log(response.data);
+
+            let listData = [];
+            for (let i = 0; i < 10; i++) {
+              listData.push({
+                  href: response.data[i].master_url,
+                  title: response.data[i].title,
+                  avatar: response.data[i].thumbnail,
+                  description:
+                  response.data[i].year,
+                  content:
+                  response.data[i].genre,
+              });
+              }
+
+              setList(listData);
+            
+            // addToast("Detect: " + response.data[0], { appearance : 'success'})
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+        .then(function () {
+            setLoading(false);
+        })
+    }
+
     useEffect(() => {
         if(!localStorage.getItem("token")) {
             setLoading(true);
             logout();  
         }
-    })
 
-    const listData = [];
-    for (let i = 0; i < 23; i++) {
-    listData.push({
-        href: 'https://ant.design',
-        title: `ant design part ${i}`,
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        description:
-        'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-        content:
-        'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-    });
-    }
+        if(localStorage.getItem('just_upload') ==="ok") {
+          addToast('Uploaded successfully!', { appearance : 'info'})
+          localStorage.removeItem('just_upload');
+        }
+    })
 
     const IconText = ({ icon, text }) => (
     <Space>
@@ -73,7 +124,7 @@ const Dashboard = () => {
                 bgColor='#f1f1f1'
                 spinnerColor='#9ee5f8'
                 textColor='#676767'
-                text='Please login your account first...'
+                text='Detect Processing...Please wait...'
             >
             <nav className="flex items-center justify-between flex-wrap bg-pink-200 p-6">
                 <div className="flex items-center flex-shrink-0 text-red-600 mr-6">
@@ -99,21 +150,28 @@ const Dashboard = () => {
                 </div>
             </nav>
 
-            <UploadFile />
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-10" onClick={() => hiddenUpload()}>
+                <i className="ion-upload"></i> {"Upload file"}
+            </button>
+
+            <div className={"mb-10 " + showUpload}>
+              <UploadFile />
+            </div>
 
             <div>
             <button onClick={()=> detect()} class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded m-2">
                Detect your genre <i className="ion-radio-waves"></i> <i className="ion-radio-waves" ></i>
             </button>
-            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2">
-               Generate youy playlist <i className="ion-ipod"></i> <i className="ion-ipod"></i>
+            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2" onClick={() => generate()}>
+               Generate your playlist <i className="ion-ipod"></i> <i className="ion-ipod"></i>
             </button>
             </div>
-            {/* <iframe width="30%" height="166" scrolling="no" frameborder="no" allow="autoplay"
-                src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/293&amp;{ ADD YOUR PARAMETERS HERE }">
-            </iframe> */}
 
-            <div className="border border-blue-300 text-center p-6 m-10 bg-gray-300 rounded hidden">
+            <div className="text-2xl uppercase text-teal-500">
+                    <i className="ion-ios7-musical-notes"></i> <i className="ion-ios7-musical-notes"></i> {detectResult || "your favorite genre"}
+            </div>
+
+            <div className={"border border-blue-300 text-center p-6 m-10 bg-gray-300 rounded " + showList}>
                 <h3 className="text-red-500 uppercase tracking-wider text-2xl">Your awesome list <i className="ion-music-note text-purple"></i> <i className="ion-music-note text-purple"></i></h3> 
 
                 <List
@@ -125,25 +183,25 @@ const Dashboard = () => {
       },
       pageSize: 5,
     }}
-    dataSource={listData}
+    dataSource={list}
     footer={
       <div>
-        <b>ant design</b> footer part
+        Made by <b>Musical_Team 2020</b>
       </div>
     }
     renderItem={item => (
       <List.Item
         key={item.title}
         actions={[
-          <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
-          <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
-          <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
+          <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+                src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/293&amp;{ ADD YOUR PARAMETERS HERE }">
+          </iframe>
         ]}
         extra={
           <img
             width={272}
             alt="logo"
-            src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+            src={item.avatar}
           />
         }
       >
@@ -152,7 +210,7 @@ const Dashboard = () => {
           title={<a href={item.href}>{item.title}</a>}
           description={item.description}
         />
-        {item.content}
+        
       </List.Item>
     )}
   />
