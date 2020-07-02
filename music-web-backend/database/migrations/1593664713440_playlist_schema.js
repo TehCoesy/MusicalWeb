@@ -11,7 +11,7 @@ class PlaylistSchema extends Schema {
       table.integer('user_id').unsigned().references('id').inTable('users')
       table.string('playlist_id').notNullable()
       table.integer('track_id').notNullable()
-      table.string('title').notNullable().unique()
+      table.string('title').notNullable()
       table.integer('year').nullable()
       table.string('label').nullable()
       table.string('genre').notNullable()
