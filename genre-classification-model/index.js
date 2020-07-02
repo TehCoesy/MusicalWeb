@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
 
     // Spawn new child process to call the python script
     var spawn = require("child_process").spawn;
-    const python = spawn('python', ['./detect_genre.py', './blues_1.wav']);
+    const python = spawn('python', ['./detect_genre.py', '../music-web-backend/resources/audio/audio-detect-file.wav']);
 
     console.log("Child process started");
 
