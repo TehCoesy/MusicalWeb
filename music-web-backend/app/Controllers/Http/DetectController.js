@@ -9,7 +9,11 @@ class DetectController {
         
         let promise = new Promise((resolve, reject) => {
             PythonShell.run('./model/detect_genre.py', null, function (err, results) {
-                if (err) throw err;
+                if (err){
+                    throw error;
+                    console.log(err);
+                    return response.status('500').send('Can detect musoc ')
+                } 
                 // results is an array consisting of messages collected during execution
                 console.log(results)
                 resolve(results)
@@ -20,12 +24,18 @@ class DetectController {
         return result;
     }
 
-    async uploadFile({request}) {
+    async uploadFile({request, response}) {
         const audio = request.file('audio', {
             type: ['audio/mpeg'],
-            size: '5mb'
+            size: '10mb'
         })
+        console.log(audio.clientName);
+        const fileName = audio.clientName;
 
+        if(!fileName.includes('wav')) {
+            return response.status(500).send('Only accept .wav format file')
+        }
+        
         await audio.move(Helpers.resourcesPath('audio'), {
             name: 'audio-detect-file.wav',
             overwrite: true
@@ -35,7 +45,7 @@ class DetectController {
             return audio.error();
         }
 
-        return 'File moved'
+        return response.status(200).send('File uploaded')
     }
 }
 
