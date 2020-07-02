@@ -16,7 +16,7 @@ from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten, BatchNor
 from keras.utils.np_utils import to_categorical
 
 CLASS_LABEL = ["blues", "classical", "country", "disco", "hiphop", "jazz", "metal", "pop", "reggae", "rock"]
-WEIGHTS_FOLDER = "./Models"
+WEIGHTS_FOLDER = "./model/Models"
 WEIGHTS_DENSE_FILENAME = "dense_weights_default.h5"
 WEIGHTS_CNN_FILENAME = "convnet_weights_default.h5"
 
@@ -93,8 +93,7 @@ def create_model_convnet(input_dim, output_dim):
     return model
 
 if __name__ == "__main__":
-    #filename = sys.argv[1]
-    filename = "blues_1.wav"
+    filename = './resources/audio/audio-detect-file.wav'
 
     # Dense model
     #feature = extract_feature_dense(filename)
@@ -108,4 +107,4 @@ if __name__ == "__main__":
 
     prediction = model.predict_classes(np.array([feature]))
 
-    print("Prediction is: " + CLASS_LABEL[prediction[0]])
+    print(CLASS_LABEL[prediction[0]])
