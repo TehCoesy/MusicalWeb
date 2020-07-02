@@ -49,7 +49,7 @@ class AuthController {
         if(user) {
             const verify = await Hash.verify(password, user.password);
             if(!verify) {
-                return 'Fail to verify';
+                return response.status(401).send('Incorrect Credential');
             }
             const token = await auth   
                 .withRefreshToken()
