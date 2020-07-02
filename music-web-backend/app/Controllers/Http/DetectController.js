@@ -2,17 +2,21 @@
 const Helpers = use('Helpers');
 
 class DetectController {
-    async detectMusicGenre({request, response}) {
+    async detectMusicGenre({request}) {
         // Spawn new child process to call the python script
         const audioFile = Helpers.resourcesPath('audio/audio-detect-file.wav')
         var spawn = require("child_process").spawn;
-        const python = spawn('python3', ['./DetectGenre/detect_genre.py', audioFile]);
+        const python = spawn('python', ['./DetectGenre/detect_genre.py', audioFile]);
         console.log(audioFile);
         // console.log(python)
         // Collect output from script
-        python.stdout.on('data', function (data) {
-            return response.send(data)
+        let d = "nothing!"
+        await python.stdout.on('data', function (data) {
+            d = data;
+            return d;
         });
+
+        return d;
     }
 
     async uploadFile({request}) {
