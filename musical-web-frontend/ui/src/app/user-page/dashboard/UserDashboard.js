@@ -38,6 +38,30 @@ const Dashboard = () => {
             })
     }
 
+    let generate = () => {
+
+      console.log(localStorage.getItem('token'))
+
+      axios.post('http://localhost:3333/generate',{
+            params: {
+              genre: "blues"
+            }
+            }, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+            }).then(function (response) {
+                // if(response.data) window.location.reload();
+                console.log(response)
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+            .then(function () {
+                setLoading(false);
+            })
+    }
+
     useEffect(() => {
         if(!localStorage.getItem("token")) {
             setLoading(true);
@@ -105,7 +129,7 @@ const Dashboard = () => {
             <button onClick={()=> detect()} class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded m-2">
                Detect your genre <i className="ion-radio-waves"></i> <i className="ion-radio-waves" ></i>
             </button>
-            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2">
+            <button onClick={()=> generate()} class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2">
                Generate youy playlist <i className="ion-ipod"></i> <i className="ion-ipod"></i>
             </button>
             </div>
@@ -113,7 +137,7 @@ const Dashboard = () => {
                 src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/293&amp;{ ADD YOUR PARAMETERS HERE }">
             </iframe> */}
 
-            <div className="border border-blue-300 text-center p-6 m-10 bg-gray-300 rounded hidden">
+            <div className="border border-blue-300 text-center p-6 m-10 bg-gray-300 rounded">
                 <h3 className="text-red-500 uppercase tracking-wider text-2xl">Your awesome list <i className="ion-music-note text-purple"></i> <i className="ion-music-note text-purple"></i></h3> 
 
                 <List
@@ -135,9 +159,7 @@ const Dashboard = () => {
       <List.Item
         key={item.title}
         actions={[
-          <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
-          <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
-          <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
+          <i className="ion-music-note"></i>
         ]}
         extra={
           <img

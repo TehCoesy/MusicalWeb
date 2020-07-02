@@ -107,4 +107,9 @@ if __name__ == "__main__":
 
     prediction = model.predict_classes(np.array([feature]))
 
+<<<<<<< HEAD:music-web-backend/app/Controllers/Http/DetectGenre/detect_genre.py
+    print("Prediction is: " + CLASS_LABEL[prediction[0]])
+    sys.stdout.flush()
+=======
     print(CLASS_LABEL[prediction[0]])
+>>>>>>> 2822b06156612c24325b1722e0e8d1da8d366184:music-web-backend/model/detect_genre.py
