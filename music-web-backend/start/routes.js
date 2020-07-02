@@ -24,6 +24,7 @@ Route.post('/logout', 'AuthController.logout').middleware(['auth']);
 
 
 Route.post('/detect', 'DetectController.detectMusicGenre').middleware(['auth']);
+Route.get('/detect', 'DetectController.detectMusicGenre').middleware(['auth']);
 Route.post('/upload', 'DetectController.uploadFile');
 
 Route.post('/generate', 'GeneratePlaylistController.generatePlaylist').middleware(['auth']);

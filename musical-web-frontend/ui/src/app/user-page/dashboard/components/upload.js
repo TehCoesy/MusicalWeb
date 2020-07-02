@@ -1,67 +1,69 @@
-import React from 'react';
-import {
-    Form,
-    Upload,
-    Button,
-    Input,
-  } from 'antd';
-import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
+import React from 'react'
+import axios, { post } from 'axios';
 
-const UploadFile = () => {
-    const normFile = e => {
-        console.log('Upload event:', e);
-      
-        if (Array.isArray(e)) {
-          return e;
+class SimpleReactFileUpload extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state ={
+      file:null
+    }
+    this.onFormSubmit = this.onFormSubmit.bind(this)
+    this.onChange = this.onChange.bind(this)
+    this.fileUpload = this.fileUpload.bind(this)
+  }
+  onFormSubmit(e){
+    e.preventDefault() // Stop form submit
+    this.fileUpload(this.state.file).then((response)=>{
+      console.log(response.data);
+    })
+  }
+  onChange(e) {
+    this.setState({file:e.target.files[0]})
+  }
+  fileUpload(file){
+    const url = 'http://localhost:3333/upload';
+    const formData = new FormData();
+    formData.append('audio',file)
+    const config = {
+        headers: {
+            'content-type': 'multipart/form-data',
+            'Authorization': 'Bearer '+ localStorage.getItem('token')
         }
-      
-        return e && e.fileList;
-    };
+    }
+    return  post(url, formData,config)
+  }
 
+  render() {
     return (
-        <div className="m-10 border p-5">
-            <Form>
-                <div className="mb-5">
-                    <label className="font-bold text-4xl text-blue-500 uppercase">Upload</label>
-                </div>
 
-                <Form.Item label="">
-                    <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
-                    <Upload.Dragger name="files" action="/upload.do">
-                        <p className="ant-upload-drag-icon">
-                        <InboxOutlined />
-                        </p>
-                        <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                        <p className="ant-upload-hint">Support for a single or bulk upload.</p>
-                    </Upload.Dragger>
-                    </Form.Item>
-                </Form.Item>
-
-                <div className="mb-5">
-                    <label className="italic">Or send a link</label>
-                </div>
-
-                <Form.Item
-                    name="link"
-                    label="Link"
-                    rules={[
-                    {
-                        required: true,
-                        message: 'Please input your link',
-                    },
-                    ]}
-                >
-                <Input placeholder="your wav link" />
-                </Form.Item>
-
-                
-                <Button type="primary" htmlType="submit" >
-                    Submit
-                </Button>
-                
-            </Form>
+        <div class="flex items-center justify-center bg-grey-lighter m-10 p-10 border border-gray-300 ">
+            <form onSubmit={this.onFormSubmit}>
+            <h1 className="uppercase text-2xl text-red-500 font-bold tracking-wider py-5">Audio Upload</h1>
+            <label class="w-64 flex flex-col items-center px-4 py-6 bg-white text-blue-500 rounded-lg shadow-lg tracking-wide uppercase border border-blue-500 cursor-pointer hover:bg-blue-500 hover:text-white">
+                <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
+                </svg>
+                <span class="mt-2 text-base leading-normal">Select a file</span>
+                <input type='file' class="hidden" onChange={this.onChange}/>
+            </label>
+            <button type="submit" class="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Submit
+            </button>
+            </form>
         </div>
-    )
+
+
+    //   <form onSubmit={this.onFormSubmit} className="m-10 py-10 border border-blue-300 rounded text-center">
+    //     <h1 className="uppercase text-2xl text-red-500 font-bold tracking-wider py-10">Audio Upload</h1>
+    //     <input type="file" onChange={this.onChange}/>
+    //     <button type="submit">Upload</button>
+       
+    //   </form>
+   )
+  }
 }
 
-export default UploadFile;
+
+
+export default SimpleReactFileUpload
