@@ -109,5 +109,4 @@ if __name__ == "__main__":
 
     prediction = model.predict_classes(np.array([feature]))
 
-    print("Prediction is: " + CLASS_LABEL[prediction[0]])
-    sys.stdout.flush()
+    print(CLASS_LABEL[prediction[0]])
