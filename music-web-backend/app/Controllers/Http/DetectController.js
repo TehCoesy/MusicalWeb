@@ -6,7 +6,8 @@ class DetectController {
         // Spawn new child process to call the python script
         const audioFile = Helpers.resourcesPath('audio/audio-detect-file.wav')
         var spawn = require("child_process").spawn;
-        const python = spawn('python3', ['./DetectGenre/detect_genre.py', audioFile]);
+        //const python = spawn('python', ['./DetectGenre/detect_genre.py', audioFile]);
+        const python = spawn('python', ['./DetectGenre/detect_genre.py']);
         console.log(audioFile);
         // console.log(python)
         // Collect output from script

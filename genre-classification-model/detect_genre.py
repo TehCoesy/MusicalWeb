@@ -94,8 +94,9 @@ def create_model_convnet(input_dim, output_dim):
 
 if __name__ == "__main__":
     filename = sys.argv[1]
-    #filename = "blues_1.wav"
 
+    #filename = "blues_1.wav"
+    #print(sys.argv)
     # Dense model
     #feature = extract_feature_dense(filename)
     #model = create_model_dense(25000, 10)
@@ -109,3 +110,4 @@ if __name__ == "__main__":
     prediction = model.predict_classes(np.array([feature]))
 
     print("Prediction is: " + CLASS_LABEL[prediction[0]])
+    sys.stdout.flush()
