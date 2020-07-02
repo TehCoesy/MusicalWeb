@@ -93,8 +93,8 @@ def create_model_convnet(input_dim, output_dim):
     return model
 
 if __name__ == "__main__":
-    filename = sys.argv[1]
-    #filename = "blues_1.wav"
+    #filename = sys.argv[1]
+    filename = "blues_1.wav"
 
     # Dense model
     #feature = extract_feature_dense(filename)
