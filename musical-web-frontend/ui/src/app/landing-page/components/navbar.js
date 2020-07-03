@@ -4,7 +4,7 @@ import logo from '../../../img/Google_Play_Music_icon-icons.com_75720.png';
 const Navbar = () => {
 
     return (
-        <nav className="flex items-center justify-between flex-wrap bg-pink-200 p-6">
+        <nav className="flex items-center justify-between flex-wrap bg-blue-200 p-6">
         <div className="flex items-center flex-shrink-0 text-red-600 mr-6">
             <img src={logo} width={50} className="px-2"></img>
             <span className="font-semibold text-xl tracking-wider">Music4Life</span>
