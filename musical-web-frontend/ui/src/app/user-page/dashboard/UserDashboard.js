@@ -19,7 +19,6 @@ const Dashboard = () => {
     const [showList, setShowList] = useState("hidden");
     const [list, setList] = useState([]);
 
-
     const logout = () => {
         localStorage.removeItem('token');
         window.location.href = "/login";
@@ -72,11 +71,14 @@ const Dashboard = () => {
 
             console.log(response.data);
 
-            localStorage.setItem('youtubeName', response.data[0].title.slice(response.data[0].title.indexOf("-")+2))
+            // localStorage.setItem('youtubeName0', response.data[0].title.slice(response.data[0].title.lastIndexOf("-")+2))
 
             let listData = [];
             for (let i = 0; i < 10; i++) {
+              localStorage.removeItem('youtubeName'+i);
+              localStorage.setItem('youtubeName'+i, response.data[i].title.slice(response.data[i].title.lastIndexOf("-")+2))
               listData.push({
+                  id: localStorage.getItem('youtubeID'+i),
                   href: response.data[i].master_url,
                   title: response.data[i].title,
                   avatar: response.data[i].thumbnail,
@@ -128,7 +130,7 @@ const Dashboard = () => {
                 textColor='#676767'
                 text='Detect Processing...Please wait...'
             >
-            <nav className="flex items-center justify-between flex-wrap bg-pink-200 p-6">
+            <nav className="flex items-center justify-between flex-wrap bg-blue-200 p-6">
                 <div className="flex items-center flex-shrink-0 text-red-600 mr-6">
                     <img src={logo} width={50} className="px-2"></img>
                     <span className="font-semibold text-xl tracking-wider">Music4Life</span>
@@ -202,13 +204,13 @@ const Dashboard = () => {
           // <iframe src="https://www.powr.io/music-player/u/551a629f_1593739659#platform=iframe" style="width:100%;" height="327px" frameborder="0"></iframe>
           // <button>Click to wat</button>
           <iframe width="100%" height="166"
-          src={"https://www.youtube.com/embed/"}>
+          src={"https://www.youtube.com/embed/" + item.id}>
           </iframe>
         ]}
         extra={
           <div> 
             <h2 className="text-base text-blue-500">Soundcloud link player <i className="ion-arrow-down-a"></i></h2>
-          <a href={"https://soundcloud.com/search/sounds?q=" + item.title.slice(item.title.indexOf("-")+2)} target="_blank"><img
+          <a href={"https://soundcloud.com/search/sounds?q=" + item.title.slice(item.title.lastIndexOf("-")+2)} target="_blank"><img
           width={272}
           alt="logo"
           src={item.avatar}

@@ -20,22 +20,33 @@
 
 
       // Make sure the client is loaded before calling this method.
-      function execute() {
-        return gapi.client.youtube.search.list({
+      function execute(i) {
+        console.log(localStorage.getItem("youtubeName"+i))
+
+      gapi.client.youtube.search.list({
           "part": [
             "snippet"
           ],
           "maxResults": 1,
-          "q": localStorage.getItem("youtubeName")
+          "q": localStorage.getItem("youtubeName"+i)
         })
             .then(function(response) {
                     // Handle the results here (response.result has the parsed body).
-                    console.log("Response", response.result.items[0].id.videoId);
-                    localStorage.setItem('youtubeID', response.result.items[0].id.videoId);
+                    localStorage.removeItem("youtubeID"+i);
+                   
+                    localStorage.setItem('youtubeID'+i, response.result.items[0].id.videoId);
+                    console.log("Response", localStorage.getItem('youtubeID'+i));
                   },
                   function(err) { console.error("Execute error", err); });
       }
+
+
+
       gapi.load("client");
+
+
+          
+        
     </script>
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
@@ -56,11 +67,11 @@
     -->
     <title>Music4Life - Awesome Music for life</title>
   </head>
-  <body class="">
+  <body class="relative">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div class="fixed bottom-0 hidden">
+    <div class="fixed bottom-0 ">
       <button onclick={loadClient()}>Load Client</button>
-      <button onclick={execute()}>Get</button>
+      <button onclick={execute(0);execute(1);execute(2);execute(3);execute(4);;execute(5);execute(6);execute(7);execute(8);execute(9)}>Get</button>
     </div>
     <div id="root"></div>
     <!--
