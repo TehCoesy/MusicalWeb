@@ -60,7 +60,6 @@ const Dashboard = () => {
 
     let generate = () => {
 
-<<<<<<< HEAD
       setShowList("");
 
       axios.get('http://localhost:3333/generate?genre='+localStorage.getItem('genre'), {
@@ -72,6 +71,8 @@ const Dashboard = () => {
             setLoading(false);
 
             console.log(response.data);
+
+            localStorage.setItem('youtubeName', response.data[0].title.slice(response.data[0].title.indexOf("-")+2))
 
             let listData = [];
             for (let i = 0; i < 10; i++) {
@@ -96,28 +97,6 @@ const Dashboard = () => {
         .then(function () {
             setLoading(false);
         })
-=======
-      console.log(localStorage.getItem('token'))
-
-      axios.post('http://localhost:3333/generate',{
-            params: {
-              genre: "blues"
-            }
-            }, {
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            }
-            }).then(function (response) {
-                // if(response.data) window.location.reload();
-                console.log(response)
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
-            .then(function () {
-                setLoading(false);
-            })
->>>>>>> e80633fc34609de2d19188c666751670d72bc995
     }
 
     useEffect(() => {
@@ -185,25 +164,16 @@ const Dashboard = () => {
             <button onClick={()=> detect()} class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded m-2">
                Detect your genre <i className="ion-radio-waves"></i> <i className="ion-radio-waves" ></i>
             </button>
-<<<<<<< HEAD
             <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2" onClick={() => generate()}>
                Generate your playlist <i className="ion-ipod"></i> <i className="ion-ipod"></i>
-=======
-            <button onClick={()=> generate()} class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2">
-               Generate youy playlist <i className="ion-ipod"></i> <i className="ion-ipod"></i>
->>>>>>> e80633fc34609de2d19188c666751670d72bc995
             </button>
             </div>
 
-<<<<<<< HEAD
             <div className="text-2xl uppercase text-teal-500">
                     <i className="ion-ios7-musical-notes"></i> <i className="ion-ios7-musical-notes"></i> {detectResult || "your favorite genre"}
             </div>
-
+            
             <div className={"border border-blue-300 text-center p-6 m-10 bg-gray-300 rounded " + showList}>
-=======
-            <div className="border border-blue-300 text-center p-6 m-10 bg-gray-300 rounded">
->>>>>>> e80633fc34609de2d19188c666751670d72bc995
                 <h3 className="text-red-500 uppercase tracking-wider text-2xl">Your awesome list <i className="ion-music-note text-purple"></i> <i className="ion-music-note text-purple"></i></h3> 
 
                 <List
@@ -222,23 +192,28 @@ const Dashboard = () => {
       </div>
     }
     renderItem={item => (
+      
       <List.Item
         key={item.title}
         actions={[
-<<<<<<< HEAD
-          <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
-                src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/293&amp;{ ADD YOUR PARAMETERS HERE }">
+          // <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+          //       src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/293&amp;{ ADD YOUR PARAMETERS HERE }">
+          // </iframe>
+          // <iframe src="https://www.powr.io/music-player/u/551a629f_1593739659#platform=iframe" style="width:100%;" height="327px" frameborder="0"></iframe>
+          // <button>Click to wat</button>
+          <iframe width="100%" height="166"
+          src={"https://www.youtube.com/embed/"}>
           </iframe>
-=======
-          <i className="ion-music-note"></i>
->>>>>>> e80633fc34609de2d19188c666751670d72bc995
         ]}
         extra={
-          <img
-            width={272}
-            alt="logo"
-            src={item.avatar}
-          />
+          <div> 
+            <h2 className="text-base text-blue-500">Soundcloud link player <i className="ion-arrow-down-a"></i></h2>
+          <a href={"https://soundcloud.com/search/sounds?q=" + item.title.slice(item.title.indexOf("-")+2)} target="_blank"><img
+          width={272}
+          alt="logo"
+          src={item.avatar}
+        /></a>
+          </div>
         }
       >
         <List.Item.Meta
