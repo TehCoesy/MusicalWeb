@@ -1,21 +1,6 @@
-# Adonis fullstack application
-
-Musical Web 
-
-## Setup
-
-```js
-run `npm install`.
-```
-
-### Migrations
-
-```js
-adonis migration:run
-```
+# react frontend 
 
 ### Start
-
 ```
-adonis serve --dev
+cd ui
 ```
